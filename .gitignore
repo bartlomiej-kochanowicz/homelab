@@ -1,6 +1,6 @@
 .DS_Store
 
 # Explicitly ignore Talos config files
-infra/talos/controlplane.yaml
-infra/talos/talosconfig
-infra/talos/worker.yaml
+talos/controlplane.yaml
+talos/talosconfig
+talos/worker.yaml
