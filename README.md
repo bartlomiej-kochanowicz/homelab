@@ -10,3 +10,9 @@ A Kubernetes homelab setup using ArgoCD for GitOps. It uses [Talos Linux](https:
 
 - Lenovo ThinkCentre m720q i3-8100T/8GB/256GB
 - Lenovo ThinkCentre m920q i5-8500T/32GB/512GB
+
+## Software Requirements
+- Kubernetes cluster (v1.25+)
+- kubectl configured to access your cluster
+- Cloudflared (for ArgoCD access)
+- Git repository (GitHub, GitLab, or similar)
