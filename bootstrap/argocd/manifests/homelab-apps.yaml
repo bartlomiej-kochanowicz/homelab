@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/bartlomiej-kochanowicz/homelab.git
     targetRevision: HEAD
-    path: bootstrap/argocd/applications  # ← Folder z definicjami Applications
+    path: bootstrap/argocd/applications
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
