@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: homelab-applications
-  namespace: argocd
 spec:
   generators:
   # Generator based on directories in apps/
