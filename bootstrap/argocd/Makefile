@@ -5,7 +5,7 @@ CHART := argo-cd
 REPO := https://argoproj.github.io/argo-helm
 VERSION := 8.6.3
 
-.PHONY: all bootstrap clean status login port-forward
+.PHONY: all bootstrap clean status login port-forward helm manifests
 
 all: bootstrap
 
