@@ -6,7 +6,7 @@ spec:
   generators:
   # Generator based on directories in apps/
   - git:
-      repoURL: https://github.com/bartlomiej-kochanowicz/homelab.git
+      repoURL: &repoURL https://github.com/bartlomiej-kochanowicz/homelab.git
       revision: HEAD
       directories:
       - path: apps/*
@@ -22,7 +22,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/bartlomiej-kochanowicz/homelab.git
+        repoURL: *repoURL
         targetRevision: HEAD
         path: '{{path}}'
       destination:

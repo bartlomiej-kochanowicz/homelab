@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  timeout.reconciliation: "60s"
+  webhooks.github.secret: ""           # TODO
+  repo.server.timeout.seconds: "60"
+  application.instanceLabelKey: argocd.argoproj.io/instance
+  application.sync.policy.default: |
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
