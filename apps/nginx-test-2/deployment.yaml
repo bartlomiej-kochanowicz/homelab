@@ -2,9 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-test-2
-  namespace: nginx-test-2
-  labels:
-    app: nginx-test-2
 spec:
   replicas: 1
   selector:
@@ -17,7 +14,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.25
+        image: nginx
         ports:
         - containerPort: 80
         env:

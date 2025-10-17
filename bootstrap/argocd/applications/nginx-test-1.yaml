@@ -1,21 +1,26 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: homelab-apps
+  name: nginx-test-1
+  namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/managed-by: homelab-apps
 spec:
   project: default
   source:
     repoURL: https://github.com/bartlomiej-kochanowicz/homelab.git
     targetRevision: HEAD
-    path: bootstrap/argocd/applications  # ← Folder z definicjami Applications
+    path: apps/nginx-test-1
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: nginx-test-1
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+    - RespectIgnoreDifferences=true
+  revisionHistoryLimit: 3
