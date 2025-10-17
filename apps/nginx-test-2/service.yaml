@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-test-2-service
+  namespace: nginx-test-2
+  labels:
+    app: nginx-test-2
+spec:
+  selector:
+    app: nginx-test-2
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
+  type: ClusterIP
