@@ -1,0 +1,152 @@
+---
+- name: Bootstrap ArgoCD on Kubernetes
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    argocd_namespace: argocd
+    argocd_release: argocd
+    argocd_chart: argo-cd
+    argocd_repo: https://argoproj.github.io/argo-helm
+    argocd_version: 8.6.3
+    kubeconfig_path: "{{ ansible_env.HOME }}/.kube/config"
+
+  tasks:
+    - name: Check if kubectl is available
+      command: kubectl version --client
+      register: kubectl_check
+      failed_when: false
+      changed_when: false
+
+    - name: Fail if kubectl is not available
+      fail:
+        msg: "kubectl is not available. Please install and configure kubectl first."
+      when: kubectl_check.rc != 0
+
+    - name: Check if Kubernetes cluster is accessible
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Namespace
+        name: default
+      register: cluster_check
+
+    - name: Add ArgoCD Helm repository
+      kubernetes.core.helm_repository:
+        name: argo
+        repo_url: "{{ argocd_repo }}"
+
+    - name: Update Helm repositories
+      kubernetes.core.helm:
+        name: dummy
+        chart_ref: argo/argo-cd
+        release_namespace: "{{ argocd_namespace }}"
+        state: absent
+        update_repo_cache: yes
+      failed_when: false
+      changed_when: false
+
+    - name: Create ArgoCD namespace
+      kubernetes.core.k8s:
+        name: "{{ argocd_namespace }}"
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Install ArgoCD using Helm
+      kubernetes.core.helm:
+        name: "{{ argocd_release }}"
+        chart_ref: "argo/{{ argocd_chart }}"
+        release_namespace: "{{ argocd_namespace }}"
+        create_namespace: true
+        chart_version: "{{ argocd_version }}"
+        wait: true
+        wait_timeout: 300
+        state: present
+
+    - name: Wait for ArgoCD pods to be ready
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Pod
+        namespace: "{{ argocd_namespace }}"
+        label_selectors:
+          - app.kubernetes.io/name=argocd-server
+        wait: true
+        wait_condition:
+          type: Ready
+          status: "True"
+        wait_timeout: 300
+
+    - name: Render ArgoCD manifests using kustomize
+      command: kubectl kustomize ./argocd/
+      register: kustomize_output
+      changed_when: false
+
+    - name: Apply rendered ArgoCD manifests
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ item }}"
+        wait: true
+        wait_timeout: 60
+      loop: "{{ kustomize_output.stdout | from_yaml_all | list }}"
+      register: manifests_result
+
+    - name: Wait for homelab-apps Application to be synced
+      kubernetes.core.k8s_info:
+        api_version: argoproj.io/v1alpha1
+        kind: Application
+        name: homelab-apps
+        namespace: "{{ argocd_namespace }}"
+      register: app_status
+      until: app_status.resources[0].status.sync.status is defined and app_status.resources[0].status.sync.status == "Synced"
+      retries: 20
+      delay: 6
+
+    - name: Wait for ApplicationSet to create child applications
+      kubernetes.core.k8s_info:
+        api_version: argoproj.io/v1alpha1
+        kind: Application
+        namespace: "{{ argocd_namespace }}"
+        label_selectors:
+          - app.kubernetes.io/managed-by=homelab-applications
+      register: child_apps
+      until: child_apps.resources | length >= 2
+      retries: 10
+      delay: 6
+
+    - name: Get ArgoCD admin password
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Secret
+        name: argocd-initial-admin-secret
+        namespace: "{{ argocd_namespace }}"
+      register: admin_secret
+
+    - name: Display ArgoCD access information
+      debug:
+        msg: |
+          ╔════════════════════════════════════════════════════════════════╗
+          ║         ✅ ArgoCD Bootstrap Successfully Completed!            ║
+          ╚════════════════════════════════════════════════════════════════╝
+
+          📌 QUICK START
+          ──────────────────────────────────────────────────────────────────
+          1️⃣  Port-forward to ArgoCD:
+             kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+          2️⃣  Open in browser:
+             https://localhost:8080
+
+          3️⃣  Login:
+             Username: admin
+             Password: {{ admin_secret.resources[0].data.password | b64decode }}
+
+
+          🎯 APPLICATIONS DEPLOYED
+          ──────────────────────────────────────────────────────────────────
+          {% for app in child_apps.resources %}
+          ✓ {{ app.metadata.name }}
+            Status: {{ app.status.sync.status | default('Unknown') }}
+            Health: {{ app.status.health.status | default('Unknown') }}
+          {% endfor %}
+      when: admin_secret.resources | length > 0
