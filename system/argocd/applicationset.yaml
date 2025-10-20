@@ -10,6 +10,8 @@ spec:
       revision: HEAD
       directories:
       - path: apps/*
+      - path: system/*
+        exclude: system/argocd/**
   template:
     metadata:
       name: '{{path.basename}}'
