@@ -99,7 +99,7 @@
         namespace: "{{ argocd_namespace }}"
       register: app_status
       until: app_status.resources[0].status.sync.status is defined and app_status.resources[0].status.sync.status == "Synced"
-      retries: 3
+      retries: 5
       delay: 5
 
     - name: Wait for ApplicationSet to create child applications
@@ -111,7 +111,7 @@
           - app.kubernetes.io/managed-by=apps-generator
       register: child_apps
       until: child_apps.resources | length >= 2
-      retries: 3
+      retries: 5
       delay: 5
 
     - name: Get ArgoCD admin password
