@@ -4,5 +4,5 @@ namespace: argocd
 resources:
   - namespace.yaml
   - argocd-cm.yaml
-  - homelab-apps.yaml
+  - argocd-bootstrap.yaml
   - applicationset.yaml

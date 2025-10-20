@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: homelab-applications
+  name: apps-generator
 spec:
   generators:
   # Generator based on directories in apps/
@@ -11,12 +11,13 @@ spec:
       directories:
       - path: apps/*
       - path: system/*
-        exclude: system/argocd/**
+        exclude:
+          - system/argocd/**
   template:
     metadata:
       name: '{{path.basename}}'
       labels:
-        app.kubernetes.io/managed-by: homelab-applications
+        app.kubernetes.io/managed-by: apps-generator
         app.kubernetes.io/part-of: homelab
         environment: test
       finalizers:

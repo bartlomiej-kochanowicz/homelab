@@ -61,7 +61,7 @@
         create_namespace: true
         chart_version: "{{ argocd_version }}"
         wait: true
-        wait_timeout: 300
+        timeout: 300s
         state: present
 
     - name: Wait for ArgoCD pods to be ready
@@ -91,11 +91,11 @@
       loop: "{{ kustomize_output.stdout | from_yaml_all | list }}"
       register: manifests_result
 
-    - name: Wait for homelab-apps Application to be synced
+    - name: Wait for argocd-bootstrap Application to be synced
       kubernetes.core.k8s_info:
         api_version: argoproj.io/v1alpha1
         kind: Application
-        name: homelab-apps
+        name: argocd-bootstrap
         namespace: "{{ argocd_namespace }}"
       register: app_status
       until: app_status.resources[0].status.sync.status is defined and app_status.resources[0].status.sync.status == "Synced"
@@ -108,7 +108,7 @@
         kind: Application
         namespace: "{{ argocd_namespace }}"
         label_selectors:
-          - app.kubernetes.io/managed-by=homelab-applications
+          - app.kubernetes.io/managed-by=apps-generator
       register: child_apps
       until: child_apps.resources | length >= 2
       retries: 3
