@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/bartlomiej-kochanowicz/homelab.git
     targetRevision: HEAD
-    path: bootstrap/argocd/manifests
+    path: system/argocd/
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
