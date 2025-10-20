@@ -1,4 +1,4 @@
-.PHONY: default system bootstrap
+.PHONY: default system
 
 default: system
 
