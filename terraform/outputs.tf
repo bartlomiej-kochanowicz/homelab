@@ -1,25 +1,27 @@
+# Output values from the Cloudflare module
+
 output "tunnel_id" {
   description = "The ID of the Cloudflare Tunnel"
-  value       = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
+  value       = module.cloudflare.tunnel_id
 }
 
 output "tunnel_token" {
   description = "The tunnel token for cloudflared (sensitive)"
-  value       = data.cloudflare_zero_trust_tunnel_cloudflared_token.homelab.token
+  value       = module.cloudflare.tunnel_token
   sensitive   = true
 }
 
 output "argocd_url" {
   description = "Public URL for ArgoCD"
-  value       = "https://${var.argocd_subdomain}.${var.domain}"
+  value       = module.cloudflare.argocd_url
 }
 
 output "tunnel_cname" {
   description = "CNAME record for the tunnel"
-  value       = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
+  value       = module.cloudflare.tunnel_cname
 }
 
 output "access_application_id" {
   description = "Cloudflare Access Application ID"
-  value       = cloudflare_zero_trust_access_application.argocd.id
+  value       = module.cloudflare.access_application_id
 }

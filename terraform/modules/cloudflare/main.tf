@@ -10,6 +10,12 @@ resource "cloudflare_zero_trust_tunnel_cloudflared" "homelab" {
   tunnel_secret = random_id.tunnel_secret.b64_std
 }
 
+# Generate tunnel token for cloudflared
+data "cloudflare_zero_trust_tunnel_cloudflared_token" "homelab" {
+  account_id = var.cloudflare_account_id
+  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
+}
+
 # Configure the tunnel with ingress rules
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   account_id = var.cloudflare_account_id
