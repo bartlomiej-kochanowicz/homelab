@@ -14,5 +14,4 @@ A Kubernetes homelab setup using ArgoCD for GitOps. It uses [Talos Linux](https:
 ## Software Requirements
 - Kubernetes cluster (v1.25+)
 - kubectl configured to access your cluster
-- Cloudflared (for ArgoCD access)
 - Git repository (GitHub, GitLab, or similar)

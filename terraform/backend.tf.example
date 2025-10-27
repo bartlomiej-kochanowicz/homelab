@@ -1,0 +1,17 @@
+# Terraform Cloud Backend Configuration Example
+# 
+# Copy this file to backend.tf and update with your organization/workspace
+# backend.tf is gitignored to keep your configuration private
+
+terraform {
+  cloud {
+    organization = "your-organization-name"
+
+    workspaces {
+      name = "homelab"
+    }
+  }
+}
+
+# Alternative: Use local backend (default if backend.tf doesn't exist)
+# No configuration needed - Terraform will use local state files
