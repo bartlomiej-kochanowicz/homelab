@@ -36,50 +36,6 @@ validate: ## Validate Terraform configuration
 format: ## Format Terraform files
 	@echo "🎨 Formatting Terraform files..."
 	terraform fmt -recursive
-
-format-check: ## Check if files are formatted
-	@echo "🔍 Checking Terraform formatting..."
-	terraform fmt -check -recursive
-
-clean: ## Clean Terraform files (.terraform, state backups)
-	@echo "🧹 Cleaning Terraform files..."
-	rm -rf .terraform
-	rm -rf .terraform.lock.hcl
-	rm -f terraform.tfstate.backup
-	rm -f .terraform.tfstate.lock.info
-	@echo "✅ Cleaned (kept state file for safety)"
-
-clean-all: ## Clean everything including state (dangerous!)
-	@echo "⚠️  This will delete ALL Terraform state!"
-	@read -p "Are you sure? Type 'yes' to continue: " confirm; \
-	if [ "$$confirm" = "yes" ]; then \
-		rm -rf .terraform .terraform.lock.hcl *.tfstate *.tfstate.backup .terraform.tfstate.lock.info; \
-		echo "✅ All Terraform files cleaned"; \
-	else \
-		echo "❌ Cancelled"; \
-	fi
-
-show: ## Show current state
-	@echo "📊 Current Terraform state:"
-	terraform show
-
-state-list: ## List all resources in state
-	@echo "📝 Resources in Terraform state:"
-	terraform state list
-
-refresh: check-vars ## Refresh Terraform state
-	@echo "🔄 Refreshing Terraform state..."
-	terraform refresh -var-file=$(TFVARS_FILE)
-
-graph: ## Generate dependency graph (requires graphviz)
-	@echo "📊 Generating dependency graph..."
-	terraform graph | dot -Tpng > graph.png
-	@echo "✅ Graph saved to graph.png"
-
-console: check-vars ## Open Terraform console
-	@echo "🖥️  Opening Terraform console (type 'exit' to quit)..."
-	terraform console -var-file=$(TFVARS_FILE)
-
 setup: ## Initial setup - copy example and prompt for edit
 	@if [ -f $(TFVARS_FILE) ]; then \
 		echo "⚠️  $(TFVARS_FILE) already exists!"; \

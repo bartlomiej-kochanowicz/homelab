@@ -26,15 +26,22 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   }
 }
 
+resource "cloudflare_zero_trust_list" "allow_emails_list" {
+  account_id = var.cloudflare_account_id
+  name       = "Allowed emails list for homelab"
+  type       = "EMAIL"
+  items      = [for email in var.allowed_emails : { value = email }]
+}
+
 # Create Access Policy - Allow specific emails
-resource "cloudflare_zero_trust_access_policy" "allow_emails" {
+resource "cloudflare_zero_trust_access_policy" "allow_emails_policy" {
   account_id = var.cloudflare_account_id
   name       = "Allow specific emails to ArgoCD"
   decision   = "allow"
 
   include = [{
-    email = {
-      email = "test@example.com"
+    email_list = {
+      id = cloudflare_zero_trust_list.allow_emails_list.id
     }
   }]
 }
@@ -62,7 +69,7 @@ resource "cloudflare_zero_trust_access_application" "argocd" {
   auto_redirect_to_identity = true
   logo_url                  = "https://logo.svgcdn.com/devicon/argocd-original.svg"
   policies = [{
-    id = cloudflare_zero_trust_access_policy.allow_emails.id
+    id = cloudflare_zero_trust_access_policy.allow_emails_policy.id
   }]
 }
 
