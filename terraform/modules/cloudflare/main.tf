@@ -5,9 +5,9 @@ resource "random_id" "tunnel_secret" {
 
 # Create the Cloudflare Tunnel
 resource "cloudflare_zero_trust_tunnel_cloudflared" "homelab" {
-  account_id        = var.cloudflare_account_id
-  name              = var.tunnel_name
-  tunnel_secret     = random_id.tunnel_secret.b64_std
+  account_id    = var.cloudflare_account_id
+  name          = var.tunnel_name
+  tunnel_secret = random_id.tunnel_secret.b64_std
 }
 
 # Configure the tunnel with ingress rules
@@ -28,9 +28,9 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
 
 # Create Access Policy - Allow specific emails
 resource "cloudflare_zero_trust_access_policy" "allow_emails" {
-  account_id     = var.cloudflare_account_id
-  name           = "Allow specific emails to ArgoCD"
-  decision       = "allow"
+  account_id = var.cloudflare_account_id
+  name       = "Allow specific emails to ArgoCD"
+  decision   = "allow"
 
   include = [{
     email = {
@@ -41,13 +41,13 @@ resource "cloudflare_zero_trust_access_policy" "allow_emails" {
 
 # Create DNS record pointing to the tunnel
 resource "cloudflare_dns_record" "argocd" {
-  zone_id   = var.cloudflare_zone_id
-  name      = var.argocd_subdomain
-  content   = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
-  type      = "CNAME"
-  proxied   = true
-  comment   = "Managed by Terraform - ArgoCD via Cloudflare Tunnel"
-  ttl       = 1 # Automatic
+  zone_id = var.cloudflare_zone_id
+  name    = var.argocd_subdomain
+  content = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
+  type    = "CNAME"
+  proxied = true
+  comment = "Managed by Terraform - ArgoCD via Cloudflare Tunnel"
+  ttl     = 1 # Automatic
 }
 
 
@@ -61,6 +61,8 @@ resource "cloudflare_zero_trust_access_application" "argocd" {
   session_duration          = "24h"
   auto_redirect_to_identity = true
   logo_url                  = "https://logo.svgcdn.com/devicon/argocd-original.svg"
-  policies                  = [cloudflare_zero_trust_access_policy.allow_emails.id]
+  policies = [{
+    id = cloudflare_zero_trust_access_policy.allow_emails.id
+  }]
 }
 
