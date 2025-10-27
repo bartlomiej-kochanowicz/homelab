@@ -4,3 +4,9 @@
 talos/controlplane.yaml
 talos/talosconfig
 talos/worker.yaml
+
+# Terraform files
+terraform/.terraform/
+terraform/**/*.tfstate
+terraform/**/*.tfplan
+terraform/**/*.tfvars
