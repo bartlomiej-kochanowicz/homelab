@@ -1,12 +1,6 @@
 output "tunnel_id" {
   description = "The ID of the Cloudflare Tunnel"
-  value       = cloudflare_tunnel.homelab.id
-}
-
-output "tunnel_token" {
-  description = "The tunnel token for cloudflared (sensitive)"
-  value       = cloudflare_tunnel.homelab.tunnel_token
-  sensitive   = true
+  value       = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
 }
 
 output "argocd_url" {
@@ -16,10 +10,10 @@ output "argocd_url" {
 
 output "tunnel_cname" {
   description = "CNAME record for the tunnel"
-  value       = "${cloudflare_tunnel.homelab.id}.cfargotunnel.com"
+  value       = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
 }
 
 output "access_application_id" {
   description = "Cloudflare Access Application ID"
-  value       = cloudflare_access_application.argocd.id
+  value       = cloudflare_zero_trust_access_application.argocd.id
 }
