@@ -1,4 +1,4 @@
 sealed-secrets:
+  fullnameOverride: sealed-secrets-controller
   controller:
     namespace: sealed-secrets
-    fullnameOverride: sealed-secrets-controller
