@@ -30,7 +30,7 @@ spec:
     app.kubernetes.io/name: crafty-controller
   ports:
   - name: minecraft-server
-    port: 25565
-    targetPort: 25565
-    nodePort: 25565
+    port: 30000
+    targetPort: 30000
+    nodePort: 30000
     protocol: TCP

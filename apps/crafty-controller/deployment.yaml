@@ -30,7 +30,7 @@ spec:
           protocol: TCP
         # Minecraft server ports (25565-25575 range for multiple servers)
         - name: minecraft-server
-          containerPort: 25565
+          containerPort: 30000
           protocol: TCP
         env:
         - name: TZ
