@@ -32,6 +32,13 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
         }
       },
       {
+        hostname = "${var.crafty_controller_subdomain}.${var.domain}"
+        service  = "https://crafty-controller.crafty-controller.svc.cluster.local:8443"
+        origin_request = {
+          no_tls_verify = true
+        }
+      },
+      {
         service = "http_status:404"
       }
     ]
@@ -69,6 +76,16 @@ resource "cloudflare_dns_record" "argocd" {
   ttl     = 1 # Automatic
 }
 
+# Create DNS record for Crafty Controller
+resource "cloudflare_dns_record" "crafty" {
+  zone_id = var.cloudflare_zone_id
+  name    = "crafty-controller"
+  content = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
+  type    = "CNAME"
+  proxied = true
+  comment = "Managed by Terraform - Crafty Controller via Cloudflare Tunnel"
+  ttl     = 1 # Automatic
+}
 
 
 # Create Cloudflare Access Application for ArgoCD
@@ -80,6 +97,20 @@ resource "cloudflare_zero_trust_access_application" "argocd" {
   session_duration          = "24h"
   auto_redirect_to_identity = true
   logo_url                  = "https://logo.svgcdn.com/devicon/argocd-original.svg"
+  policies = [{
+    id = cloudflare_zero_trust_access_policy.allow_emails_policy.id
+  }]
+}
+
+# Create Cloudflare Access Application for Crafty Controller
+resource "cloudflare_zero_trust_access_application" "crafty" {
+  account_id                = var.cloudflare_account_id
+  name                      = "Crafty Controller - Homelab"
+  domain                    = "crafty-controller.${var.domain}"
+  type                      = "self_hosted"
+  session_duration          = "24h"
+  auto_redirect_to_identity = true
+  logo_url                  = "https://avatars.githubusercontent.com/u/45508816"
   policies = [{
     id = cloudflare_zero_trust_access_policy.allow_emails_policy.id
   }]

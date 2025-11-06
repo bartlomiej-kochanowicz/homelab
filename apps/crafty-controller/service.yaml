@@ -7,19 +7,11 @@ metadata:
     app.kubernetes.io/name: crafty-controller
     app.kubernetes.io/part-of: homelab
 spec:
-  type: LoadBalancer
+  type: ClusterIP  # Web UI only accessible via Cloudflare Tunnel
   selector:
     app.kubernetes.io/name: crafty-controller
   ports:
   - name: web
     port: 8443
     targetPort: 8443
-    protocol: TCP
-  - name: dynmap
-    port: 8123
-    targetPort: 8123
-    protocol: TCP
-  - name: minecraft-1
-    port: 25565
-    targetPort: 25565
     protocol: TCP

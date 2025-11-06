@@ -1,12 +1,13 @@
 # Copy this file to terraform.tfvars and fill in your values
 # DO NOT commit terraform.tfvars to git (it's in .gitignore)
 
-cloudflare_api_token  = "your-cloudflare-api-token-here"
-cloudflare_account_id = "your-account-id-here"
-cloudflare_zone_id    = "your-zone-id-here"
-domain                = "example.com"
-argocd_subdomain      = "argocd"
-tunnel_name           = "homelab-tunnel"
+cloudflare_api_token        = "your-cloudflare-api-token-here"
+cloudflare_account_id       = "your-account-id-here"
+cloudflare_zone_id          = "your-zone-id-here"
+domain                      = "example.com"
+argocd_subdomain            = "argocd"
+tunnel_name                 = "homelab-tunnel"
+crafty_controller_subdomain = "crafty-controller"
 
 # Email addresses allowed to access ArgoCD
 allowed_emails = [

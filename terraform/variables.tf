@@ -42,3 +42,15 @@ variable "allowed_emails" {
   type        = list(string)
   default     = []
 }
+
+variable "crafty_controller_subdomain" {
+  description = "Subdomain for Crafty Controller (e.g., crafty-controller)"
+  type        = string
+  default     = "crafty-controller"
+}
+
+variable "crafty_controller_service_url" {
+  description = "Internal Kubernetes service URL for Crafty Controller"
+  type        = string
+  default     = "https://crafty-controller.crafty-controller.svc.cluster.local:8443"
+}
