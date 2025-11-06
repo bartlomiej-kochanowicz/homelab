@@ -37,20 +37,7 @@ spec:
           value: "Europe/Warsaw"
         volumeMounts:
         - name: crafty-data
-          mountPath: /crafty/backups
-          subPath: backups
-        - name: crafty-data
-          mountPath: /crafty/logs
-          subPath: logs
-        - name: crafty-data
-          mountPath: /crafty/servers
-          subPath: servers
-        - name: crafty-data
-          mountPath: /crafty/config
-          subPath: config
-        - name: crafty-data
-          mountPath: /crafty/import
-          subPath: import
+          mountPath: /crafty
         resources:
           requests:
             memory: "4Gi"
