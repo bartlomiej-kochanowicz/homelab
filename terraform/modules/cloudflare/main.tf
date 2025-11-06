@@ -33,7 +33,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
       },
       {
         hostname = "${var.crafty_controller_subdomain}.${var.domain}"
-        service  = "https://crafty-controller.crafty-controller.svc.cluster.local:8443"
+        service  = "${var.crafty_controller_service_url}"
         origin_request = {
           no_tls_verify = true
         }
@@ -65,7 +65,7 @@ resource "cloudflare_zero_trust_access_policy" "allow_emails_policy" {
   }]
 }
 
-# Create DNS record pointing to the tunnel
+# Create DNS record for ArgoCD pointing to the tunnel
 resource "cloudflare_dns_record" "argocd" {
   zone_id = var.cloudflare_zone_id
   name    = var.argocd_subdomain
@@ -76,7 +76,7 @@ resource "cloudflare_dns_record" "argocd" {
   ttl     = 1 # Automatic
 }
 
-# Create DNS record for Crafty Controller
+# Create DNS record for Crafty Controller pointing to the tunnel
 resource "cloudflare_dns_record" "crafty" {
   zone_id = var.cloudflare_zone_id
   name    = "crafty-controller"
