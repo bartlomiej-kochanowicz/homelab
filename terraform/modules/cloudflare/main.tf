@@ -22,19 +22,16 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
 
   config = {
-    ingress = [
-      {
-        hostname = "${var.argocd_subdomain}.${var.domain}"
-        service  = var.argocd_service_url
-        origin_request = {
-          no_tls_verify = true
-        }
-      },
-      {
-        # Catch-all rule (required) - returns 404 for any other requests
-        service = "http_status:404"
+    ingress_rule {
+      hostname = "${var.argocd_subdomain}.${var.domain}"
+      service  = var.argocd_service_url
+      origin_request = {
+        no_tls_verify = true
       }
-    ]
+    }
+    ingress_rule {
+     service  = "http_status:404"
+   }
   }
 }
 
