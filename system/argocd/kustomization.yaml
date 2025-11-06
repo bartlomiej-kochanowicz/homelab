@@ -6,3 +6,4 @@ resources:
   - argocd-cm.yaml
   - argocd-bootstrap.yaml
   - applicationset.yaml
+  - cloudflared.yaml

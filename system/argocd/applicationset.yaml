@@ -10,14 +10,6 @@ spec:
       revision: HEAD
       directories:
       - path: apps/*
-  # Generator for system/ directories (excluding argocd to prevent recursion)
-  - git:
-      repoURL: *repoURL
-      revision: HEAD
-      directories:
-      - path: system/*
-      - path: system/argocd
-        exclude: true
   template:
     metadata:
       name: '{{path.basename}}'
