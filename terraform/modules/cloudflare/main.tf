@@ -35,9 +35,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
         service = "http_status:404"
       }
     ]
-    ingress_rule {
-     service  = "http_status:404"
-   }
   }
 }
 
