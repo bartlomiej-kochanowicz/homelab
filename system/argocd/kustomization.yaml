@@ -6,4 +6,5 @@ resources:
   - argocd-cm.yaml
   - argocd-bootstrap.yaml
   - applicationset.yaml
+  - sealed-secrets.yaml
   - cloudflared.yaml
