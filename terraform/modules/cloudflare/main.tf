@@ -22,6 +22,9 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
 
   config = {
+    warp_routing = {
+      enabled = false
+    }
     ingress = [
       {
         hostname = "${var.argocd_subdomain}.${var.domain}"
@@ -31,7 +34,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
         }
       },
       {
-        # Catch-all rule (required) - returns 404 for any other requests
         service = "http_status:404"
       }
     ]
