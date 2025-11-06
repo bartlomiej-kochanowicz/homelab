@@ -15,3 +15,22 @@ spec:
     port: 8443
     targetPort: 8443
     protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crafty-minecraft
+  namespace: crafty-controller
+  labels:
+    app.kubernetes.io/name: crafty-controller
+    app.kubernetes.io/part-of: homelab
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: crafty-controller
+  ports:
+  - name: minecraft-server
+    port: 25565
+    targetPort: 25565
+    nodePort: 25565
+    protocol: TCP

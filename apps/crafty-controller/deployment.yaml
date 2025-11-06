@@ -29,7 +29,7 @@ spec:
           containerPort: 8123
           protocol: TCP
         # Minecraft server ports (25565-25575 range for multiple servers)
-        - name: minecraft-1
+        - name: minecraft-server
           containerPort: 25565
           protocol: TCP
         env:
