@@ -51,6 +51,9 @@ spec:
         - name: crafty-data
           mountPath: /crafty/import
           subPath: import
+        - name: crafty-data
+          mountPath: /crafty/app/config/db
+          subPath: database
         resources:
           requests:
             memory: "4Gi"
