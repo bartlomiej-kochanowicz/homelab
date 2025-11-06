@@ -20,11 +20,9 @@ data "cloudflare_zero_trust_tunnel_cloudflared_token" "homelab" {
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   account_id = var.cloudflare_account_id
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
+  warp_routing_enabled = false
 
   config = {
-    warp_routing = {
-      enabled = false
-    }
     ingress = [
       {
         hostname = "${var.argocd_subdomain}.${var.domain}"
