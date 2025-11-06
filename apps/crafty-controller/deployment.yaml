@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crafty-controller
+  namespace: crafty-controller
+  labels:
+    app.kubernetes.io/name: crafty-controller
+    app.kubernetes.io/part-of: homelab
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crafty-controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: crafty-controller
+    spec:
+      containers:
+      - name: crafty-controller
+        image: arcadiatechnology/crafty-4:4.5.5
+        ports:
+        - name: web
+          containerPort: 8443
+          protocol: TCP
+        - name: dynmap
+          containerPort: 8123
+          protocol: TCP
+        # Minecraft server ports (25565-25575 range for multiple servers)
+        - name: minecraft-1
+          containerPort: 25565
+          protocol: TCP
+        env:
+        - name: TZ
+          value: "Europe/Warsaw"
+        volumeMounts:
+        - name: crafty-data
+          mountPath: /crafty/backups
+          subPath: backups
+        - name: crafty-data
+          mountPath: /crafty/logs
+          subPath: logs
+        - name: crafty-data
+          mountPath: /crafty/servers
+          subPath: servers
+        - name: crafty-data
+          mountPath: /crafty/config
+          subPath: config
+        - name: crafty-data
+          mountPath: /crafty/import
+          subPath: import
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1000m"
+          limits:
+            memory: "12Gi"
+            cpu: "3000m"
+      volumes:
+      - name: crafty-data
+        persistentVolumeClaim:
+          claimName: crafty-data
