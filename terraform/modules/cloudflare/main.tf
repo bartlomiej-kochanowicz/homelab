@@ -39,6 +39,13 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
         }
       },
       {
+        hostname = "grafana.${var.domain}"
+        service  = "${var.crafty_controller_service_url}"
+        origin_request = {
+          no_tls_verify = true
+        }
+      },
+      {
         service = "http_status:404"
       }
     ]
@@ -119,6 +126,30 @@ resource "cloudflare_zero_trust_access_application" "crafty" {
   account_id                = var.cloudflare_account_id
   name                      = "Crafty Controller - Homelab"
   domain                    = "crafty-controller.${var.domain}"
+  type                      = "self_hosted"
+  session_duration          = "72h"
+  auto_redirect_to_identity = true
+  policies = [{
+    id = cloudflare_zero_trust_access_policy.allow_emails_policy.id
+  }]
+}
+
+# Create DNS record for Grafana pointing to the tunnel
+resource "cloudflare_dns_record" "grafana" {
+  zone_id = var.cloudflare_zone_id
+  name    = "grafana"
+  content = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
+  type    = "CNAME"
+  proxied = true
+  comment = "Managed by Terraform - Grafana via Cloudflare Tunnel"
+  ttl     = 1 # Automatic
+}
+
+# Create Cloudflare Access Application for Grafana
+resource "cloudflare_zero_trust_access_application" "grafana" {
+  account_id                = var.cloudflare_account_id
+  name                      = "Grafana - Homelab"
+  domain                    = "grafana.${var.domain}"
   type                      = "self_hosted"
   session_duration          = "72h"
   auto_redirect_to_identity = true

@@ -60,3 +60,9 @@ variable "cluster_public_ip" {
   type        = string
   sensitive   = true
 }
+
+variable "grafana_service_url" {
+  description = "Internal Kubernetes service URL for Grafana"
+  type        = string
+  default     = "http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local:80"
+}

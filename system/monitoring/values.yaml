@@ -1,0 +1,52 @@
+kube-prometheus-stack:
+  grafana:
+    enabled: true
+    adminPassword: "admin" # temp - to change :P
+    ingress:
+      enabled: false
+    persistence:
+      enabled: true
+      storageClassName: local-path
+      size: 10Gi
+
+  prometheus:
+    prometheusSpec:
+      retention: 30d
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: local-path
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 50Gi
+      resources:
+        requests:
+          memory: 2Gi
+          cpu: 500m
+        limits:
+          memory: 4Gi
+          cpu: 2000m
+
+  alertmanager:
+    alertmanagerSpec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: local-path
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 5Gi
+
+  # Node Exporter - metrics from all nodes
+  nodeExporter:
+    enabled: true
+
+  # Kube State Metrics - cluster state metrics
+  kubeStateMetrics:
+    enabled: true
+
+  # Prometheus Operator
+  prometheusOperator:
+    enabled: true
