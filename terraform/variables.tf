@@ -54,3 +54,9 @@ variable "crafty_controller_service_url" {
   type        = string
   default     = "https://crafty-controller.crafty-controller.svc.cluster.local:8443"
 }
+
+variable "cluster_public_ip" {
+  description = "Public IP address of the cluster"
+  type        = string
+  sensitive   = true
+}

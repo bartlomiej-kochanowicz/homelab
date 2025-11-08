@@ -91,6 +91,33 @@ resource "cloudflare_dns_record" "crafty" {
   ttl     = 1 # Automatic
 }
 
+resource "cloudflare_dns_record" "mc" {
+  zone_id = var.cloudflare_zone_id
+  name    = "mc"
+  content = "${cluster_public_ip}"
+  type    = "A"
+  proxied = false
+  comment = "Managed by Terraform - Minecraft Server via Cloudflare Tunnel"
+}
+
+resource "cloudflare_dns_record" "mc" {
+  zone_id = var.cloudflare_zone_id
+  name    = "mc"
+  type    = "SRV"
+  proxied = false
+  comment = "Managed by Terraform - Minecraft Server via Cloudflare Tunnel"
+
+  data = {
+    service  = "_minecraft"
+    proto    = "_tcp"
+    name     = "mc"
+    priority = 0
+    weight   = 5
+    port     = 30000
+    target   = "mc.${var.domain}"
+  }
+}
+
 
 # Create Cloudflare Access Application for ArgoCD
 resource "cloudflare_zero_trust_access_application" "argocd" {
@@ -98,9 +125,8 @@ resource "cloudflare_zero_trust_access_application" "argocd" {
   name                      = "ArgoCD - Homelab"
   domain                    = "${var.argocd_subdomain}.${var.domain}"
   type                      = "self_hosted"
-  session_duration          = "24h"
+  session_duration          = "72h"
   auto_redirect_to_identity = true
-  logo_url                  = "https://logo.svgcdn.com/devicon/argocd-original.svg"
   policies = [{
     id = cloudflare_zero_trust_access_policy.allow_emails_policy.id
   }]
@@ -112,9 +138,8 @@ resource "cloudflare_zero_trust_access_application" "crafty" {
   name                      = "Crafty Controller - Homelab"
   domain                    = "crafty-controller.${var.domain}"
   type                      = "self_hosted"
-  session_duration          = "24h"
+  session_duration          = "72h"
   auto_redirect_to_identity = true
-  logo_url                  = "https://avatars.githubusercontent.com/u/45508816"
   policies = [{
     id = cloudflare_zero_trust_access_policy.allow_emails_policy.id
   }]
