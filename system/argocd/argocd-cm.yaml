@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
 data:
+  kustomize.buildOptions: "--enable-helm"
   timeout.reconciliation: "60s"
   webhooks.github.secret: ""           # TODO
   repo.server.timeout.seconds: "60"
