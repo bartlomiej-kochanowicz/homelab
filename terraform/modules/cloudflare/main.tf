@@ -94,10 +94,11 @@ resource "cloudflare_dns_record" "crafty" {
 resource "cloudflare_dns_record" "mc_a" {
   zone_id = var.cloudflare_zone_id
   name    = "mc"
-  content = "${cluster_public_ip}"
+  content = "${var.cluster_public_ip}"
   type    = "A"
   proxied = false
   comment = "Managed by Terraform - Minecraft Server via Cloudflare Tunnel"
+  ttl     = 1 # Automatic
 }
 
 resource "cloudflare_dns_record" "mc_srv" {
@@ -106,6 +107,7 @@ resource "cloudflare_dns_record" "mc_srv" {
   type    = "SRV"
   proxied = false
   comment = "Managed by Terraform - Minecraft Server via Cloudflare Tunnel"
+  ttl     = 1 # Automatic
 
   data = {
     service  = "_minecraft"
