@@ -94,32 +94,12 @@ resource "cloudflare_dns_record" "crafty" {
 resource "cloudflare_dns_record" "mc_a" {
   zone_id = var.cloudflare_zone_id
   name    = "mc"
-  content = "${var.cluster_public_ip}"
+  content = var.cluster_public_ip
   type    = "A"
   proxied = false
-  comment = "Managed by Terraform - Minecraft Server via Cloudflare Tunnel"
+  comment = "Managed by Terraform - Minecraft Server A record"
   ttl     = 1 # Automatic
 }
-
-resource "cloudflare_dns_record" "mc_srv" {
-  zone_id = var.cloudflare_zone_id
-  name    = "_minecraft._tcp.mc"
-  type    = "SRV"
-  proxied = false
-  comment = "Managed by Terraform - Minecraft SRV record"
-  ttl     = 1 # Automatic
-
-  data = {
-    service  = "_minecraft"
-    proto    = "_tcp"
-    name     = "mc"
-    priority = 0
-    weight   = 5
-    port     = 30000
-    target   = "mc.${var.domain}."
-  }
-}
-
 
 # Create Cloudflare Access Application for ArgoCD
 resource "cloudflare_zero_trust_access_application" "argocd" {
