@@ -8,6 +8,10 @@ data:
     {
       "nodePathMap":[
         {
+          "node":"talos-2jn-7he",
+          "paths":["/var/mnt/minecraft"]
+        },
+        {
           "node":"DEFAULT_PATH_FOR_NON_LISTED_NODES",
           "paths":["/opt/local-path-provisioner"]
         }
