@@ -9,4 +9,5 @@ module "cloudflare" {
   argocd_subdomain      = var.argocd_subdomain
   argocd_service_url    = var.argocd_service_url
   allowed_emails        = var.allowed_emails
+  cluster_public_ip     = var.cluster_public_ip
 }
