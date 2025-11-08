@@ -22,7 +22,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
 
   config = {
-    warp_routing_enabled = false
+    warp_routing_enabled = true
     ingress = [
       {
         hostname = "${var.argocd_subdomain}.${var.domain}"
