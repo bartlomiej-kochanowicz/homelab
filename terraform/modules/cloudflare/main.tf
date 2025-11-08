@@ -22,6 +22,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
 
   config = {
+    warp_routing_enabled = false
     ingress = [
       {
         hostname = "${var.argocd_subdomain}.${var.domain}"
@@ -44,7 +45,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   }
 
   lifecycle {
-    ignore_changes = [config["warp_routing"]]
+    ignore_changes = [config[0].warp_routing]
   }
 }
 
