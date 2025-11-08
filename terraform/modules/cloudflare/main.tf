@@ -40,7 +40,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
       },
       {
         hostname = "grafana.${var.domain}"
-        service  = "${var.crafty_controller_service_url}"
+        service  = "${var.grafana_service_url}"
         origin_request = {
           no_tls_verify = true
         }
