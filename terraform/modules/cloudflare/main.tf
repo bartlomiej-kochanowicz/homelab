@@ -103,10 +103,10 @@ resource "cloudflare_dns_record" "mc_a" {
 
 resource "cloudflare_dns_record" "mc_srv" {
   zone_id = var.cloudflare_zone_id
-  name    = "mc"
+  name    = "_minecraft._tcp.mc"
   type    = "SRV"
   proxied = false
-  comment = "Managed by Terraform - Minecraft Server via Cloudflare Tunnel"
+  comment = "Managed by Terraform - Minecraft SRV record"
   ttl     = 1 # Automatic
 
   data = {
@@ -116,7 +116,7 @@ resource "cloudflare_dns_record" "mc_srv" {
     priority = 0
     weight   = 5
     port     = 30000
-    target   = "mc.${var.domain}"
+    target   = "mc.${var.domain}."
   }
 }
 
