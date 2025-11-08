@@ -45,7 +45,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   }
 
   lifecycle {
-    ignore_changes = [config.warp_routing]
+    ignore_changes = [config]
   }
 }
 
