@@ -91,7 +91,7 @@ resource "cloudflare_dns_record" "crafty" {
   ttl     = 1 # Automatic
 }
 
-resource "cloudflare_dns_record" "mc" {
+resource "cloudflare_dns_record" "mc_a" {
   zone_id = var.cloudflare_zone_id
   name    = "mc"
   content = "${cluster_public_ip}"
@@ -100,7 +100,7 @@ resource "cloudflare_dns_record" "mc" {
   comment = "Managed by Terraform - Minecraft Server via Cloudflare Tunnel"
 }
 
-resource "cloudflare_dns_record" "mc" {
+resource "cloudflare_dns_record" "mc_srv" {
   zone_id = var.cloudflare_zone_id
   name    = "mc"
   type    = "SRV"
