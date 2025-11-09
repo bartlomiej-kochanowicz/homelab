@@ -9,4 +9,4 @@ resources:
   - sealed-secrets.yaml
   - local-path-provisioner.yaml
   - cloudflared.yaml
-  - monitoring.yaml
+  ## - monitoring.yaml TODO: monitoring
