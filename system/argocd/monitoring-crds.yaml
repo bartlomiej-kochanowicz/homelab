@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-operator-crds
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: prometheus-operator-crds
+    app.kubernetes.io/part-of: homelab
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/prometheus-community/helm-charts.git
+    targetRevision: kube-prometheus-stack-79.4.1
+    path: charts/kube-prometheus-stack/charts/crds/crds
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: false  # Never prune CRDs automatically
+      selfHeal: true
+    syncOptions:
+      - Replace=true
