@@ -50,10 +50,9 @@ kube-prometheus-stack:
   # Prometheus Operator
   prometheusOperator:
     enabled: true
-    # Ensure CRDs are created
+    # Disable admission webhooks to avoid TLS issues
     admissionWebhooks:
-      enabled: true
-  
+      enabled: false
   # Install CRDs
   crds:
     enabled: true
