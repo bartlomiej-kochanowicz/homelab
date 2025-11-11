@@ -68,7 +68,7 @@ variable "grafana_service_url" {
 }
 
 variable "home_assistant_subdomain" {
-  description = "Subdomain for Home Assistant (e.g., home)"
+  description = "Subdomain for Home Assistant"
   type        = string
   default     = "home-assistant"
 }

@@ -57,10 +57,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
       }
     ]
   }
-
-  lifecycle {
-    ignore_changes = [config]
-  }
 }
 
 resource "cloudflare_zero_trust_list" "allow_emails_list" {
