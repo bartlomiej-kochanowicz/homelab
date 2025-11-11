@@ -46,6 +46,13 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
         }
       },
       {
+        hostname = "${var.home_assistant_subdomain}.${var.domain}"
+        service  = "${var.home_assistant_service_url}"
+        origin_request = {
+          no_tls_verify = true
+        }
+      },
+      {
         service = "http_status:404"
       }
     ]
@@ -150,6 +157,30 @@ resource "cloudflare_zero_trust_access_application" "grafana" {
   account_id                = var.cloudflare_account_id
   name                      = "Grafana - Homelab"
   domain                    = "grafana.${var.domain}"
+  type                      = "self_hosted"
+  session_duration          = "72h"
+  auto_redirect_to_identity = true
+  policies = [{
+    id = cloudflare_zero_trust_access_policy.allow_emails_policy.id
+  }]
+}
+
+# Create DNS record for Home Assistant pointing to the tunnel
+resource "cloudflare_dns_record" "home_assistant" {
+  zone_id = var.cloudflare_zone_id
+  name    = var.home_assistant_subdomain
+  content = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
+  type    = "CNAME"
+  proxied = true
+  comment = "Managed by Terraform - Home Assistant via Cloudflare Tunnel"
+  ttl     = 1 # Automatic
+}
+
+# Create Cloudflare Access Application for Home Assistant
+resource "cloudflare_zero_trust_access_application" "home_assistant" {
+  account_id                = var.cloudflare_account_id
+  name                      = "Home Assistant - Homelab"
+  domain                    = "${var.home_assistant_subdomain}.${var.domain}"
   type                      = "self_hosted"
   session_duration          = "72h"
   auto_redirect_to_identity = true

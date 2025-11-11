@@ -66,3 +66,15 @@ variable "grafana_service_url" {
   type        = string
   default     = "http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local:80"
 }
+
+variable "home_assistant_subdomain" {
+  description = "Subdomain for Home Assistant (e.g., home)"
+  type        = string
+  default     = "home-assistant"
+}
+
+variable "home_assistant_service_url" {
+  description = "Internal Kubernetes service URL for Home Assistant"
+  type        = string
+  default     = "http://home-assistant.home-assistant.svc.cluster.local:8123"
+}
