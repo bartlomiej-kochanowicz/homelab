@@ -6,3 +6,6 @@ metadata:
     name: home-assistant
     app.kubernetes.io/name: home-assistant
     app.kubernetes.io/part-of: homelab
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/warn: privileged
