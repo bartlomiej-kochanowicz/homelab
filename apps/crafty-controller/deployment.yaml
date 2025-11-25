@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: crafty-controller
-        image: arcadiatechnology/crafty-4:4.5.5
+        image: arcadiatechnology/crafty-4:4.6.1
         ports:
         - name: web
           containerPort: 8443
