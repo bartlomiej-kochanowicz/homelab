@@ -34,6 +34,9 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: config-file
+          mountPath: /config/configuration.yaml
+          subPath: configuration.yaml
         livenessProbe:
           httpGet:
             path: /
@@ -61,3 +64,6 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: home-assistant-config
+      - name: config-file
+        configMap:
+          name: home-assistant-config
